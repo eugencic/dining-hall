@@ -15,7 +15,15 @@ class Clients(Thread):
     def __init__(self, *args, **kwargs):
         # Access methods of the base class
         super(Clients, self).__init__(*args, **kwargs)
-
+        
+    # Represent the thread's activity
+    def run(self):
+        # Continuous threading of creating objects
+        while True:
+            self.create_order()   
+             
+    # Convert a function to be a static method, which does not receive an implicit first argument
+    @staticmethod
     # Method to generate an order
     def generate_order():
         # Return the next table and it's index from the list of tables
