@@ -43,6 +43,11 @@ class Clients(Thread):
             order_id = int(random.randint(1, 1000) * random.randint(1, 1000))
             # Create the order
             order = {'table_id': table['id'], 'id': order_id, 'items': chosen_foods, 'priority': random.randint(1, 5)}
+
+# Customized Waiter class extending the Thread class          
+class Waiter(Thread):
+    def __init__(self, data, *args, **kwargs):
+        super(Waiter, self).__init__(*args, **kwargs)
    
 def run_dinninghall():
     app.run(host = '0.0.0.0', port = 3000, debug = True)
