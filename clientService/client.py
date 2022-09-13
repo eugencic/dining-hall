@@ -6,10 +6,10 @@ from components.foods import menu
 from components.orders import order_queue
 
 # Customized Clients class extending the Thread class
-class Clients(Thread):
+class Client(Thread):
     def __init__(self, *args, **kwargs):
         # Access methods of the base class
-        super(Clients, self).__init__(*args, **kwargs)
+        super(Client, self).__init__(*args, **kwargs)
 
     # Represent the thread's activity
     def run(self):
