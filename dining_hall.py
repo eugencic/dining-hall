@@ -12,7 +12,7 @@ threads = []
 @app.route('/distribution')
 
 def run_dinninghall():
-    app.run(host = '0.0.0.0', port = 3000, debug = True)
+    app.run(host = '0.0.0.0', port = 3000, debug = False)
     # Create thread Client
     client_thread = Client()
     # Add the thread to the array
