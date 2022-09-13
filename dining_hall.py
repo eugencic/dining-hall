@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from clientService.client import Client
 from clientService.waiter import Waiter
 
@@ -9,7 +9,12 @@ app = Flask(__name__)
 threads = []
 
 # App route
-@app.route('/distribution')
+@app.route('/distribution', methods = ['GET', 'POST'])
+
+def distribution():
+    data = request.get_json()
+    print(f'Order nr.{data["order_id"]} is served to table nr.{data["table_id"]}.')
+    return {'success': True}
 
 def run_dinninghall():
     app.run(host = '0.0.0.0', port = 3000, debug = False)
@@ -23,11 +28,11 @@ def run_dinninghall():
     threads.append(waiter_thread)
     
     # Start the threads
-    for th in threads:
-        th.start()
+    for thread in threads:
+        thread.start()
     # Wait for the threads to complete    
-    for th in threads:
-        th.join()
+    for thread in threads:
+        thread.join()
 
 if __name__ == '__main__':
     run_dinninghall()
