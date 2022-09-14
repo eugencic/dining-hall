@@ -34,6 +34,6 @@ class Waiter(Thread):
             time.sleep(4)
             # Put the order data in a dictionary
             payload = dict({'table_id': order['table_id'], 'order_id': order['id'], 'items': order['items'], 'priority': order['priority']})
-            requests.post('http://localhost:8000/order', json = payload, timeout = 0.0001)
+            requests.post('http://kitchen:8000/order', json = payload, timeout = 0.0001)
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
             pass
