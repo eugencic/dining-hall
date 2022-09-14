@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  dininghall:
+    image: dininghall
+    ports:
+      - "3000:3000" 
+networks:
+  default:
+    name: restaurant
+    external: True
