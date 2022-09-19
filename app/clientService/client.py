@@ -3,7 +3,7 @@ import time
 import random
 from components.tables import *
 from components.foods import menu
-from components.orders import order_queue
+from components.orders import *
 
 # Customized Clients class extending the Thread class
 class Client(Thread):
@@ -34,7 +34,20 @@ class Client(Thread):
             chosen_foods = random.sample(range(1, len(menu) + 1), random.randint(1, 10))
             # Random order priority
             order_priority = random.randint(1, 5)
+            # Calculate the maximum wait time
+            max_wait_time = 0
+            for i in chosen_foods:
+                food = menu[i - 1]
+                if max_wait_time < food['preparation-time']:
+                    max_wait_time = food['preparation-time']
+            max_wait_time = max_wait_time * 1.3
             # Create the order
-            order = {'table_id': table['id'], 'id': order_id, 'items': chosen_foods, 'priority': order_priority}
+            order = {'table_id': table['id'], 'id': order_id, 'items': chosen_foods, 'priority': order_priority, 'max_wait': max_wait_time}
             # Put the order in the orders queue
             order_queue.put(order)
+            # Verify the order after receiving it from the kitchen
+            orders.append(order)
+            # Add the order to the table
+            tables[table_id]['order_id'] = order_id
+            # Change the table state
+            tables[table_id]['state'] = table_state2

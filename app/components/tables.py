@@ -6,6 +6,7 @@ global tables
 table_state1 = 'The table is free'
 table_state2 = 'The table is waiting to make an order'
 table_state3 = 'The table is waiting for the order to be served'
+table_state4 = 'The table is waiting to be free'
 
 tables = [
     {

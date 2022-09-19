@@ -2,6 +2,7 @@ from flask import Flask, request
 from clientService.client import Client
 from clientService.waiter import Waiter
 from threading import Thread
+from components.waiters import waiters
 
 # Create a Flask object called app
 app = Flask(__name__)
@@ -24,11 +25,11 @@ def run_dinninghall():
     client_thread = Client()
     # Add the thread to the array
     threads.append(client_thread)
-    # Create thread Waiter
-    waiter_thread = Waiter()
-    # Add the thread to the list
-    threads.append(waiter_thread)
-    
+    for _, waiter in enumerate(waiters):
+        # Create Waiter threads
+        waiter_thread = Waiter(waiter)
+        # Add the thread to the list
+        threads.append(waiter_thread)
     # Start the threads
     for thread in threads:
         thread.start()
