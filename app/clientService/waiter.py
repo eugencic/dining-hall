@@ -37,10 +37,10 @@ class Waiter(Thread):
             # Change the state of the table
             tables[table_id]['state'] = table_state2
             # Execution time
-            time.sleep(random.randint(3, 4) * time_unit)
+            time.sleep(random.randint(2, 4) * time_unit)
             # Put the order data in a dictionary
-            payload = dict({'table_id': order['table_id'], 'order_id': order['id'], 'items': order['items'], 'priority': order['priority']})
-            requests.post('http://kitchen:8000/order', json = payload, timeout = 0.0001)
+            payload = dict({'order_id': order['id'], 'table_id': order['table_id'], 'waiter_id': self.id, 'items': order['items'], 'priority': order['priority'], 'max_wait': order['max_wait'], "pick_up_time": time.time()})
+            requests.post('http://localhost:8000/order', json = payload, timeout = 0.0001)
         # Exceptions
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
             pass
