@@ -22,9 +22,13 @@ class Client(Thread):
 
     # Method to generate an order
     def generate_order(self):
-        # Return the next free table and it's index from the list of tables
-        # Iterate through the tables and return nothing by default, when the iteration ends
-        (table_id, table) = next(((index, table) for index, table in enumerate(tables) if tables[index]['state'] == table_state1), (None, None))
+        # Return the next free table from the list of tables
+        table_id = None
+        table = None
+        for index, table_info in enumerate(tables):
+            if tables[index]['state'] == table_state1:
+                table_id = index
+                table = table_info
         # Check if there is a free table
         if table_id is not None:
             # Random order id
@@ -45,9 +49,9 @@ class Client(Thread):
             order = {'table_id': table['id'], 'id': order_id, 'items': chosen_foods, 'priority': order_priority, 'max_wait': max_wait_time}
             # Put the order in the orders queue
             order_queue.put(order)
-            # Verify the order after receiving it from the kitchen
-            orders.append(order)
             # Add the order to the table
             tables[table_id]['order_id'] = order_id
             # Change the table state
             tables[table_id]['state'] = table_state2
+            # Verify the order after receiving it from the kitchen
+            orders.append(order)
