@@ -15,7 +15,7 @@ threads = []
 
 def distribution():
     data = request.get_json()
-    print(f'Order nr.{data["order_id"]} is served to table nr.{data["table_id"]}.\n')
+    print(f'Order nr.{data["order_id"]} is served to table nr.{data["table_id"]}\n')
     return {'success': True}
 
 def run_dinninghall():
