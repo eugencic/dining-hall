@@ -53,7 +53,10 @@ class Client(Thread):
             # Verify the order after receiving it from the kitchen
             orders.append(order)
         else:
-            time.sleep(random.randint(2, 6) * time_unit)
+            # Random time for clints to free the table
+            time.sleep(random.randint(2, 10) * time_unit)
+            # Free a random table
             (table_id, table) = next(((id, table) for id, table in enumerate(tables) if table['state'] == table_state4), (None, None))
             if table_id is not None:
+                # Change the status of the table
                 tables[table_id]['state'] = table_state1
