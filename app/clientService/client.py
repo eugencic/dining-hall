@@ -5,6 +5,8 @@ from components.tables import *
 from components.foods import menu
 from components.orders import *
 
+time_unit = 1
+
 # Customized Clients class extending the Thread class
 class Client(Thread):
     def __init__(self, *args, **kwargs):
@@ -23,12 +25,7 @@ class Client(Thread):
     # Method to generate an order
     def generate_order(self):
         # Return the next free table from the list of tables
-        table_id = None
-        table = None
-        for index, table_info in enumerate(tables):
-            if tables[index]['state'] == table_state1:
-                table_id = index
-                table = table_info
+        (table_id, table) = next(((id, table) for id, table in enumerate(tables) if table['state'] == table_state1), (None, None))
         # Check if there is a free table
         if table_id is not None:
             # Random order id
@@ -55,3 +52,8 @@ class Client(Thread):
             tables[table_id]['state'] = table_state2
             # Verify the order after receiving it from the kitchen
             orders.append(order)
+        else:
+            time.sleep(random.randint(2, 6) * time_unit)
+            (table_id, table) = next(((id, table) for id, table in enumerate(tables) if table['state'] == table_state4), (None, None))
+            if table_id is not None:
+                tables[table_id]['state'] = table_state1

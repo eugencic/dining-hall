@@ -1,6 +1,7 @@
 global table_state1
 global table_state2
 global table_state3
+global table_state4
 global tables
 
 table_state1 = 'The table is free'

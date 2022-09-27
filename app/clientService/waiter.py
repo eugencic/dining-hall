@@ -38,7 +38,7 @@ class Waiter(Thread):
             # Detailed message that the waiter took the order
             print(f'Table nr.{order["table_id"]}. Waiter {threading.current_thread().name} is taking the order nr.{order["id"]}. It has the priority {order["priority"]}, and foods: {order["items"]}\n')
             # Change the state of the table
-            tables[table_id]['state'] = table_state2
+            tables[table_id]['state'] = table_state3
             # Execution time
             time.sleep(random.randint(2, 4) * time_unit)
             # Put the order data in a dictionary
@@ -63,7 +63,7 @@ class Waiter(Thread):
             for index, table in enumerate(tables):
                 if table['id'] == sent_order['table_id']:
                     table_id = index
-            tables[table_id]['state'] = table_state3
+            tables[table_id]['state'] = table_state4
             # Time from when the order was picked up
             order_pick_up= int(sent_order['pick_up_time'])
             # Time for when the order is served
