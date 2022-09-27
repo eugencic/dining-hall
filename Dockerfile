@@ -14,4 +14,4 @@ COPY /app .
 EXPOSE 3000
 
 # Run the application
-CMD ["python", "dining_hall.py"]
+CMD ["python", "-u", "dining_hall.py"]
