@@ -19,10 +19,5 @@ waiters = [
     {
         'id': 4,
         'name': 'Olivia'
-    },
-    
-    {
-        'id': 5,
-        'name': 'William'
     }
 ]
