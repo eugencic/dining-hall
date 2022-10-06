@@ -45,8 +45,8 @@ class Waiter(Thread):
             # Put the order data in a dictionary
             payload = dict({'order_id': order['id'], 'table_id': order['table_id'], 'waiter_id': self.id, 'items': order['items'], 'priority': order['priority'], 'max_wait': order['max_wait'], "pick_up_time": time.time()})
             # Send the order to the kitchen
-            requests.post('http://localhost:8000/order', json = payload, timeout = 0.0001)
-            #requests.post('http://kitchen:8000/order', json = payload, timeout = 0.0001)
+            #requests.post('http://localhost:8000/order', json = payload, timeout = 0.0001)
+            requests.post('http://kitchen:8000/order', json = payload, timeout = 0.0001)
         # Exceptions
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
             pass
@@ -99,7 +99,7 @@ class Waiter(Thread):
                 'priority': sent_order['priority'],
                 'wait_time': sent_order['wait_time'],
                 'serving_time': order_total_time,
-                'order_rating': order_stars,
+                'order_rating': order_stars['star'],
                 }
             # Message with the information of the served order
             print(
