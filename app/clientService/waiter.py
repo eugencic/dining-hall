@@ -7,6 +7,7 @@ import threading
 import random
 
 time_unit = 1
+orders_rating = []
 
 # Customized Waiter class extending the Thread class
 class Waiter(Thread):
@@ -23,7 +24,7 @@ class Waiter(Thread):
             # Execute the function to take an order
             self.take_order()
 
-    # Method to make an order
+    # Method to take an order
     def take_order(self):
         # Handling exceptions
         try:
@@ -44,8 +45,8 @@ class Waiter(Thread):
             # Put the order data in a dictionary
             payload = dict({'order_id': order['id'], 'table_id': order['table_id'], 'waiter_id': self.id, 'items': order['items'], 'priority': order['priority'], 'max_wait': order['max_wait'], "pick_up_time": time.time()})
             # Send the order to the kitchen
-            #requests.post('http://localhost:8000/order', json = payload, timeout = 0.0001)
-            requests.post('http://kitchen:8000/order', json = payload, timeout = 0.0001)
+            requests.post('http://localhost:8000/order', json = payload, timeout = 0.0001)
+            #requests.post('http://kitchen:8000/order', json = payload, timeout = 0.0001)
         # Exceptions
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
             pass
@@ -66,11 +67,29 @@ class Waiter(Thread):
                     table_id = index
             tables[table_id]['state'] = table_state4
             # Time from when the order was picked up
-            order_pick_up= int(sent_order['pick_up_time'])
+            order_pick_up = int(sent_order['pick_up_time'])
             # Time for when the order is served
             order_serving = int(time.time())
             # Calculate the total time of the order till it was served
             order_total_time = order_serving - order_pick_up
+            # Calculate the order rating
+            order_stars = {'order_id': sent_order['order_id']}
+            if sent_order['wait_time'] > order_total_time:
+                order_stars['star'] = 5
+            elif sent_order['wait_time']* 1.1 > order_total_time:
+                order_stars['star'] = 4
+            elif sent_order['wait_time'] * 1.2 > order_total_time:
+                order_stars['star'] = 3
+            elif sent_order['wait_time'] * 1.3 > order_total_time:
+                order_stars['star'] = 2
+            elif sent_order['wait_time'] * 1.4 > order_total_time:
+                order_stars['star'] = 1
+            else:
+                order_stars['star'] = 0
+            # Restaurant reputation 
+            orders_rating.append(order_stars)
+            calculate_stars = sum(stars['star'] for stars in orders_rating)
+            average = float(calculate_stars / len(orders_rating))
             # Create the served order dict
             served_order = {
                 'order_id': sent_order['order_id'], 
@@ -79,7 +98,9 @@ class Waiter(Thread):
                 'items': sent_order['items'], 
                 'priority': sent_order['priority'],
                 'wait_time': sent_order['wait_time'],
-                'serving_time': order_total_time}
+                'serving_time': order_total_time,
+                'order_rating': order_stars,
+                }
             # Message with the information of the served order
             print(
                 f'Serving the order:\n'
@@ -89,7 +110,9 @@ class Waiter(Thread):
                 f'Items: {served_order["items"]}\n'
                 f'Priority: {served_order["priority"]}\n'
                 f'Max Wait: {served_order["wait_time"]}\n'
-                f'Waiting time: {served_order["serving_time"]}\n')
+                f'Waiting time: {served_order["serving_time"]}\n'
+                f'Order rating: {served_order["order_rating"]}\n'
+                f'Restaurant rating: {average}\n')
         # Exception if the order is not the same as requested
         else:
             raise Exception(f'There is a mistake. Provide the required order to costumer. Required: {received_order} Given: {sent_order}\n')
