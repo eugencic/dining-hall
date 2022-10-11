@@ -32,7 +32,7 @@ class Client(Thread):
             order_id = int(random.random() * random.random() / random.random() * 1000)
             # Create an array to store the chosen foods id's
             # The client can order up to 10 foods
-            chosen_foods = random.sample(range(1, len(menu) + 1), random.randint(1, 10))
+            chosen_foods = random.sample(range(1, len(menu) + 1), random.randint(1, 5))
             # Random order priority
             order_priority = random.randint(1, 5)
             # Calculate the maximum wait time
